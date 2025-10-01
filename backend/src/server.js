@@ -30,7 +30,7 @@ app.use("/api/lab", labRoutes);
 
 // static files
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   // Match any route not starting with /api
 
@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === "production") {
   //   });
 
   app.get("*", (req, res, next) => {
-    res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
     console.log(__dirname);
   });
 }
