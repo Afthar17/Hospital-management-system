@@ -7,11 +7,13 @@ import receptionRoutes from "./routes/receptionRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import labRoutes from "./routes/labRoutes.js";
 import cors from "cors";
+import path from "path";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const __dirname = path.resolve();
 
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
@@ -25,6 +27,23 @@ app.use("/api/auth", authRoutes);
 app.use("/api/reception", receptionRoutes);
 app.use("/api/doctor", doctorRoutes);
 app.use("/api/lab", labRoutes);
+
+// static files
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  // Match any route not starting with /api
+
+  //in version 5 of express path to regrex couldnt work on wildcard routes so use normal javascript regrex
+  //   app.get(/^\/(?!api).*/, (req, res) => {
+  //     res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+  //   });
+
+  app.get("*", (req, res, next) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    console.log(__dirname);
+  });
+}
 
 // start server
 app.listen(PORT, () => {
