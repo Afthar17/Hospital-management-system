@@ -16,6 +16,7 @@ const billingSchema = new mongoose.Schema(
       enum: ["paid", "unpaid"],
       default: "unpaid",
     },
+    invoiceUrl: { type: String },
   },
   {
     timestamps: true,

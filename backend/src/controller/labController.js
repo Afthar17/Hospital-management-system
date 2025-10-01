@@ -2,6 +2,7 @@ import { generateLabReport } from "../lib/labreport.js";
 import Patient from "../models/patientModel.js";
 import LabReport from "../models/labReports.js";
 
+// Get all patients
 export const getPatients = async (req, res) => {
   try {
     const patients = await Patient.find();
@@ -18,6 +19,7 @@ export const getPatients = async (req, res) => {
   }
 };
 
+// Add lab report
 export const addLabReport = async (req, res) => {
   try {
     const { pressure, temperature } = req.body;
@@ -39,14 +41,14 @@ export const addLabReport = async (req, res) => {
     // Save report record
     const report = new LabReport({
       patientId: patient._id,
-      fileUrl: uploadInfo.viewUrl, // store viewable link
+      fileUrl: uploadInfo.viewUrl,
       uploadedBy: req.user._id,
     });
     await report.save();
 
     res.status(200).json({
-      pdfUrl: uploadInfo.viewUrl, // for frontend to view in browser
-      downloadUrl: uploadInfo.downloadUrl, // optional direct download
+      pdfUrl: uploadInfo.viewUrl,
+      downloadUrl: uploadInfo.downloadUrl,
       report,
     });
   } catch (error) {

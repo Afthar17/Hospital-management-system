@@ -98,16 +98,20 @@ function PatientList({ patients }) {
 
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-      <div className="bg-gray-100 text-sm font-semibold text-gray-700 px-3 py-2">
-        Name
+      <div className="flex justify-between bg-gray-100 text-sm font-semibold text-gray-700 px-5 py-2">
+        <span>Name</span>
+        <span>Amount</span>
       </div>
       <div className="divide-y divide-gray-200">
         {patients.map((patient, idx) => (
           <div
             key={idx}
-            className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
+            className="flex justify-between px-5   py-2 text-sm text-gray-600 hover:bg-gray-50 transition"
           >
-            {patient.name}
+            <span>{patient.name}</span>
+            <span className="font-medium text-gray-800">
+              ₹{patient.bill?.totalAmount || 0}
+            </span>
           </div>
         ))}
       </div>

@@ -2,7 +2,9 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import { genToken } from "../lib/utils.js";
 import Patient from "../models/patientModel.js";
+import Billing from "../models/billModel.js";
 
+// signup
 export const signUp = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -33,6 +35,7 @@ export const signUp = async (req, res) => {
   }
 };
 
+// login
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -55,6 +58,7 @@ export const login = async (req, res) => {
   }
 };
 
+// register user by admin
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -90,6 +94,7 @@ export const register = async (req, res) => {
   }
 };
 
+// logout
 export const logout = async (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
@@ -101,6 +106,7 @@ export const logout = async (req, res) => {
   }
 };
 
+// check auth
 export const checkAuth = async (req, res) => {
   try {
     console.log(req.user);
@@ -113,6 +119,7 @@ export const checkAuth = async (req, res) => {
   }
 };
 
+// get all users admin only
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find({ _id: { $ne: req.user._id } }).select(
@@ -129,16 +136,27 @@ export const getUsers = async (req, res) => {
 
 export const getPatientsAdmin = async (req, res) => {
   try {
-    const patients = await Patient.find();
-    if (!patients) {
+    const patients = await Patient.find().lean();
+
+    if (!patients || patients.length === 0) {
       return res.status(400).json({ message: "No patient found" });
     }
-    res.status(200).json({ patients });
+
+    // Attach bills
+    const patientsWithBills = await Promise.all(
+      patients.map(async (p) => {
+        const bill = await Billing.findOne({ patient: p._id }).lean();
+        return { ...p, bill };
+      })
+    );
+
+    res.status(200).json(patientsWithBills);
   } catch (error) {
     res.status(500).json({ message: "error", error: error.message });
   }
 };
 
+// delete user admin only
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;

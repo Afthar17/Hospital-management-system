@@ -43,7 +43,11 @@ const Navbar = () => {
           </div>
           <div className="flex flex-col gap-4 p-4 text-center">
             <p>Home</p>
-            <p>Login</p>
+            {user ? (
+              <Link onClick={logOut}>Logout</Link>
+            ) : (
+              <Link to="/login">Login</Link>
+            )}
             {/* <Button title="Sign Up" /> */}
           </div>
         </motion.div>

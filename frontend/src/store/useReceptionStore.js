@@ -40,12 +40,12 @@ export const useReceptionStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Error fetching doctors");
     }
   },
-  // useReceptionStore.js
+
   updateBill: async (patientId) => {
     try {
       const res = await axios.put(`/reception/update-bill/${patientId}`);
       toast.success("Bill updated to paid");
-      await get().getPatients(); // refetch with latest bill status
+      await get().getPatients();
       return res.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Error updating bill");

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useUserStore } from "../store/useUserStore";
 import { useReceptionStore } from "../store/useReceptionStore";
 import { Link } from "react-router-dom";
+import { CheckmarkIcon } from "react-hot-toast";
 
 const Receptions = () => {
   const { user } = useUserStore();
@@ -47,7 +48,7 @@ const Receptions = () => {
                     Name
                   </th>
                   <th className="p-3 text-left text-sm font-semibold text-gray-700">
-                    Contact
+                    Contact No
                   </th>
                   <th className="p-3 text-left text-sm font-semibold text-gray-700">
                     Amount
@@ -82,14 +83,39 @@ const Receptions = () => {
                         </span>
                       )}
                     </td>
-                    <td className="p-3 text-center">
+
+                    {/* Action buttons */}
+                    <td className="p-3 text-center flex flex-col gap-2 items-center justify-center">
+                      {/* Mark as Paid */}
                       {p.bill?.paidStatus !== "paid" && (
-                        <button
-                          onClick={() => updateBill(p._id)}
-                          className="px-4 py-1 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700 transition"
+                        <>
+                          {/* Show full button on md+ screens */}
+                          <button
+                            onClick={() => updateBill(p._id)}
+                            className="hidden md:inline-block px-4 py-1 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700 transition"
+                          >
+                            Mark as Paid
+                          </button>
+
+                          <button
+                            onClick={() => updateBill(p._id)}
+                            className="md:hidden bg-white text-white p-2 rounded-full hover:bg-emerald-700 transition"
+                            title="Mark as Paid"
+                          >
+                            <CheckmarkIcon />
+                          </button>
+                        </>
+                      )}
+
+                      {p.bill?.invoiceUrl && (
+                        <a
+                          href={p.bill.invoiceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-emerald-600 text-xs hover:underline"
                         >
-                          Mark as Paid
-                        </button>
+                          View Invoice
+                        </a>
                       )}
                     </td>
                   </tr>

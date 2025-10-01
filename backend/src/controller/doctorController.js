@@ -1,6 +1,7 @@
 import Patient from "../models/patientModel.js";
 import LabReports from "../models/labReports.js";
 
+//fetch patients associated with the doctor
 export const getPatients = async (req, res) => {
   try {
     const patients = await Patient.find({ consultingDoctor: req.user._id });
@@ -14,6 +15,7 @@ export const getPatients = async (req, res) => {
   }
 };
 
+//fetch single patient
 export const getPatient = async (req, res) => {
   try {
     const { id } = req.params;
@@ -31,6 +33,7 @@ export const getPatient = async (req, res) => {
   }
 };
 
+//add prescription
 export const addPrescription = async (req, res) => {
   try {
     const { prescription } = req.body;
@@ -53,6 +56,7 @@ export const addPrescription = async (req, res) => {
   }
 };
 
+//fetch lab reports
 export const getDoctorLabReports = async (req, res) => {
   try {
     const patients = await Patient.find({
@@ -63,8 +67,8 @@ export const getDoctorLabReports = async (req, res) => {
 
     // Fetch lab reports for those patients
     const reports = await LabReports.find({ patientId: { $in: patientIds } })
-      .populate("patientId", "name age gender") // populate patient basic info
-      .populate("uploadedBy", "name role"); // populate who uploaded
+      .populate("patientId", "name age gender")
+      .populate("uploadedBy", "name role");
 
     res.status(200).json(reports);
   } catch (err) {

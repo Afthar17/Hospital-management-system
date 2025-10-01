@@ -1,3 +1,4 @@
+import { generateInvoice } from "../lib/invoice.js";
 import Billing from "../models/billModel.js";
 import Patient from "../models/patientModel.js";
 import User from "../models/userModel.js";
@@ -24,13 +25,28 @@ export const addPatient = async (req, res) => {
       address,
       consultingDoctor,
     });
+
     const bill = await Billing.create({
       patient: patient._id,
       totalAmount: amount,
     });
-    res
-      .status(201)
-      .json({ message: "Patient added successfully", patient, bill });
+
+    const populatedPatient = await Patient.findById(patient._id).populate(
+      "consultingDoctor",
+      "name"
+    );
+
+    const invoiceUrl = await generateInvoice(populatedPatient, bill);
+
+    bill.invoiceUrl = invoiceUrl;
+    await bill.save();
+
+    res.status(201).json({
+      message: "Patient added successfully",
+      patient,
+      bill,
+      invoiceUrl,
+    });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }

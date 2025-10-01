@@ -31,14 +31,6 @@ app.use("/api/lab", labRoutes);
 // static files
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  // Match any route not starting with /api
-
-  //in version 5 of express path to regrex couldnt work on wildcard routes so use normal javascript regrex
-  //   app.get(/^\/(?!api).*/, (req, res) => {
-  //     res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
-  //   });
-
   app.get("*", (req, res, next) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
     console.log(__dirname);
