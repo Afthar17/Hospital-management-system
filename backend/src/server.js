@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === "production") {
   //   });
 
   app.get("*", (req, res, next) => {
-    res.sendFile(path.join(__dirname, "../../frontend", "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
     console.log(__dirname);
   });
 }
