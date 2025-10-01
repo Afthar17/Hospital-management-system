@@ -30,7 +30,7 @@ app.use("/api/lab", labRoutes);
 
 // static files
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
   // Match any route not starting with /api
 
